@@ -1,0 +1,36 @@
+diff -ur apr-1.3.9.new/test/Makefile.in apr-1.3.9.test/test/Makefile.in
+--- apr-1.3.9.new/test/Makefile.in	2010-01-22 11:01:10.281250000 +0100
++++ apr-1.3.9.test/test/Makefile.in	2010-01-22 11:08:24.515625000 +0100
+@@ -118,16 +118,16 @@
+ 	$(LIBTOOL) $(LTFLAGS) --mode=compile $(COMPILE) -prefer-pic -o $@ \
+ 	  -c $(srcdir)/mod_test.c
+ 
+-OBJECTS_mod_test = mod_test.lo
++OBJECTS_mod_test = mod_test.lo  $(LOCAL_LIBS)
+ mod_test.la: $(OBJECTS_mod_test)
+ 	$(LIBTOOL) $(LTFLAGS) --mode=link $(COMPILE) -rpath `pwd` -module \
+-	  -avoid-version $(LT_LDFLAGS) $(ALL_LDFLAGS) -o $@ \
++	  -avoid-version $(LT_LDFLAGS) -no-undefined $(ALL_LDFLAGS) -o $@ \
+ 	  $(OBJECTS_mod_test)
+ 
+ OBJECTS_libmod_test = mod_test.lo $(LOCAL_LIBS)
+ libmod_test.la: $(OBJECTS_libmod_test)
+ 	$(LIBTOOL) $(LTFLAGS) --mode=link $(COMPILE) -rpath `pwd` \
+-	  -avoid-version $(LT_LDFLAGS) $(ALL_LDFLAGS) -o $@ \
++	  -avoid-version $(LT_LDFLAGS) -no-undefined $(ALL_LDFLAGS) -o $@ \
+ 	  $(OBJECTS_libmod_test) $(ALL_LIBS)
+ 
+ OBJECTS_occhild = occhild.lo $(LOCAL_LIBS)
+diff -ur apr-1.3.9.new/test/testdso.c apr-1.3.9.test/test/testdso.c
+--- apr-1.3.9.new/test/testdso.c	2010-01-22 11:01:10.296875000 +0100
++++ apr-1.3.9.test/test/testdso.c	2010-01-22 11:09:15.437500000 +0100
+@@ -44,6 +44,9 @@
+ #elif defined(_AIX) || defined(__bsdi__)
+ # define MOD_NAME ".libs/libmod_test.so"
+ # define LIB_NAME ".libs/libmod_test.so"
++#elif defined(CYGWIN)
++# define MOD_NAME ".libs/mod_test.dll"
++# define LIB_NAME ".libs/cygmod_test.dll"
+ #else /* Every other Unix */
+ # define MOD_NAME ".libs/mod_test.so"
+ # define LIB_NAME ".libs/libmod_test.so"

@@ -1,0 +1,43 @@
+diff -ur apr-1.3.9.new/configure apr-1.3.9/configure
+--- apr-1.3.9.new/configure	2010-01-22 11:01:09.718750000 +0100
++++ apr-1.3.9/configure	2010-01-22 11:12:54.375000000 +0100
+@@ -23749,7 +23749,7 @@
+ if test "x$use_libtool" = "xyes"; then
+       lt_compile='$(LIBTOOL) $(LTFLAGS) --mode=compile $(COMPILE) -o $@ -c $< && touch $@'
+       LT_VERSION="-version-info `$get_version libtool $version_hdr APR`"
+-      link="\$(LIBTOOL) \$(LTFLAGS) --mode=link \$(LT_LDFLAGS) \$(COMPILE) \$(LT_VERSION) \$(ALL_LDFLAGS) -o \$@"
++      link="\$(LIBTOOL) \$(LTFLAGS) --mode=link \$(LT_LDFLAGS) \$(COMPILE) \$(LT_VERSION) -no-undefined \$(ALL_LDFLAGS) -o \$@"
+       so_ext='lo'
+       lib_target='-rpath $(libdir) $(OBJECTS)'
+       export_lib_target='-rpath \$(libdir) \$(OBJECTS)'
+diff -ur apr-1.3.9.new/configure.in apr-1.3.9/configure.in
+--- apr-1.3.9.new/configure.in	2010-01-22 11:01:09.718750000 +0100
++++ apr-1.3.9/configure.in	2010-01-22 11:04:09.484375000 +0100
+@@ -13,17 +13,7 @@
+ dnl 
+ dnl Include our own M4 macros along with those for libtool
+ dnl 
+-sinclude(build/apr_common.m4)
+-sinclude(build/apr_network.m4)
+-sinclude(build/apr_threads.m4)
+-sinclude(build/apr_win32.m4)
+-sinclude(build/apr_hints.m4)
+-sinclude(build/libtool.m4)
+-sinclude(build/ltsugar.m4)
+-sinclude(build/argz.m4)
+-sinclude(build/ltoptions.m4)
+-sinclude(build/ltversion.m4)
+-sinclude(build/lt~obsolete.m4)
++AC_CONFIG_MACRO_DIR(build)
+ 
+ dnl Hard-coded inclusion at the tail end of apr_private.h:
+ AH_BOTTOM([
+@@ -207,7 +197,7 @@
+ if test "x$use_libtool" = "xyes"; then
+       lt_compile='$(LIBTOOL) $(LTFLAGS) --mode=compile $(COMPILE) -o $@ -c $< && touch $@'
+       LT_VERSION="-version-info `$get_version libtool $version_hdr APR`"
+-      link="\$(LIBTOOL) \$(LTFLAGS) --mode=link \$(LT_LDFLAGS) \$(COMPILE) \$(LT_VERSION) \$(ALL_LDFLAGS) -o \$@"
++      link="\$(LIBTOOL) \$(LTFLAGS) --mode=link \$(LT_LDFLAGS) \$(COMPILE) \$(LT_VERSION) -no-undefined \$(ALL_LDFLAGS) -o \$@"
+       so_ext='lo'
+       lib_target='-rpath $(libdir) $(OBJECTS)'
+       export_lib_target='-rpath \$(libdir) \$(OBJECTS)'
